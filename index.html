@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GitHub Profile README Generator</title>
+<meta name="description" content="Create a polished GitHub profile README with a form or ChatGPT-assisted workflow.">
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#e6edf3;background:#080b10;--panel:#0d1117;--line:#30363d;--muted:#8b949e;--accent:#a371f7}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#24163b 0,transparent 34%),radial-gradient(circle at 90% 10%,#10223a 0,transparent 28%),#080b10}.wrap{max-width:1280px;margin:auto;padding:34px 20px}.hero{margin-bottom:24px}.eyebrow{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:clamp(38px,6vw,72px);line-height:1;margin:10px 0}.hero p{color:var(--muted);max-width:760px;line-height:1.6}.modes{display:flex;gap:8px;margin:22px 0}.mode{border:1px solid var(--line);background:#11161d;color:#c9d1d9;border-radius:12px;padding:11px 15px;font-weight:800;cursor:pointer}.mode.active{background:var(--accent);border-color:var(--accent);color:white}.grid{display:grid;grid-template-columns:390px 1fr;gap:20px}.panel{border:1px solid var(--line);background:rgba(13,17,23,.9);border-radius:18px;padding:18px;box-shadow:0 18px 60px #0005}.panel h2{margin:0 0 15px;font-size:18px}.field{margin-bottom:13px}.field label{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:6px}.field input,.field textarea{width:100%;border:1px solid var(--line);background:#080b10;color:#e6edf3;border-radius:10px;padding:10px 12px;font:inherit}.field textarea{min-height:85px;resize:vertical}.sections{display:grid;grid-template-columns:1fr 1fr;gap:7px}.check{display:flex;gap:8px;align-items:center;border:1px solid #21262d;border-radius:10px;padding:9px;font-size:12px;color:#c9d1d9}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}.primary{background:var(--accent);color:white}.secondary{background:#21262d;color:white}.preview{position:sticky;top:18px;height:max-content}.code{white-space:pre-wrap;overflow:auto;max-height:70vh;background:#010409;border:1px solid var(--line);border-radius:12px;padding:16px;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#c9d1d9}.hint,.status{color:var(--muted);font-size:12px;margin-top:10px}.chatbox{display:none}.chatbox.show{display:block}.chatbox textarea{width:100%;min-height:250px;background:#080b10;color:#e6edf3;border:1px solid var(--line);border-radius:12px;padding:14px;font:13px/1.5 ui-monospace,monospace}.chat-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.notice{border:1px solid #3b2c5a;background:#171122;padding:12px;border-radius:12px;color:#c9d1d9;font-size:13px;line-height:1.5;margin-bottom:14px}.hidden{display:none}@media(max-width:900px){.grid{grid-template-columns:1fr}.preview{position:static}.hero h1{font-size:48px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">GitHub Profile README Generator</div><h1>Build a profile people remember.</h1><p>Create a polished GitHub profile README from a simple form — or use your own ChatGPT session to build the profile conversationally. No API key. No backend. Download the final Markdown.</p></section>
+<div class="modes"><button class="mode active" data-mode="manual">✦ Build manually</button><button class="mode" data-mode="chat">✦ Build with ChatGPT</button></div>
+<section class="grid">
+<div class="panel">
+<div id="manual">
+<h2>Profile details</h2>
+<div class="field"><label>Name</label><input id="name" value="Your Name"></div>
+<div class="field"><label>GitHub username</label><input id="github" value="yourusername"></div>
+<div class="field"><label>Headline</label><input id="headline" value="Developer • Open Source Enthusiast"></div>
+<div class="field"><label>Intro</label><textarea id="intro">Learning, experimenting, and building useful things with technology.</textarea></div>
+<div class="field"><label>About me</label><textarea id="about">I'm passionate about building practical software, learning new technologies, and turning ideas into useful projects.</textarea></div>
+<div class="field"><label>Current focus</label><textarea id="focus">Artificial Intelligence\nMachine Learning\nWeb Development\nOpen Source</textarea></div>
+<div class="field"><label>Email</label><input id="email" placeholder="you@example.com"></div>
+<div class="field"><label>LinkedIn URL</label><input id="linkedin" placeholder="https://linkedin.com/in/yourname"></div>
+<div class="field"><label>Website</label><input id="website" placeholder="https://example.com"></div>
+<h2>Sections</h2><div class="sections" id="sections"></div>
+<div class="actions"><button class="button primary" id="download">Download README.md</button><button class="button secondary" id="copy">Copy Markdown</button></div>
+</div>
+<div id="chat" class="chatbox">
+<div class="notice"><strong>No API required.</strong><br>Use your own ChatGPT session to answer the questions. ChatGPT will produce a structured profile payload that this generator can import and turn into the selected template.</div>
+<div class="actions"><button class="button primary" id="openChat">Open ChatGPT</button><button class="button secondary" id="copyPrompt">Copy prompt</button></div>
+<div class="field" style="margin-top:16px"><label>Paste the generated profile data here</label><textarea id="chatInput" placeholder="Paste the JSON/profile payload from ChatGPT..."></textarea></div>
+<div class="chat-actions"><button class="button primary" id="importChat">Import profile</button><button class="button secondary" id="sampleChat">Load example</button></div>
+</div>
+<div class="status" id="status"></div>
+</div>
+<div class="panel preview"><h2>Markdown preview</h2><pre class="code" id="output"></pre><div class="hint">Create a repository named exactly after your GitHub username and put this file at its root. GitHub renders it as your profile README.</div></div>
+</section>
+</main>
+<script>
+const defs=[['hero','Hero'],['about','About Me'],['exploring','What I\'m Exploring'],['stack','Tech Stack'],['stats','GitHub Statistics'],['activity','Contribution Activity'],['snake','Contribution Snake'],['opensource','Open Source'],['trophies','GitHub Trophies'],['building','What I\'m Building'],['focus','Current Focus'],['journey','Learning Journey'],['connect','Let\'s Connect']];
+const sections=document.getElementById('sections'); defs.forEach(([id,label])=>{let e=document.createElement('label');e.className='check';e.innerHTML=`<input type="checkbox" data-section="${id}" checked> ${label}`;sections.appendChild(e)});
+const ids=['name','github','headline','intro','about','focus','email','linkedin','website']; ids.forEach(id=>document.getElementById(id).addEventListener('input',render)); sections.addEventListener('change',render);
+function v(id){return document.getElementById(id).value.trim()} function en(id){return document.querySelector(`[data-section="${id}"]`).checked} function badge(x){return `![${x}](https://img.shields.io/badge/${encodeURIComponent(x)}-000000?style=for-the-badge)`}
+function render(){const n=v('name')||'Your Name',u=v('github')||'yourusername';let m='';
+if(en('hero'))m+=`<h1 align="center">${n}</h1>\n\n<p align="center"><strong>${v('headline')||'Developer'}</strong></p>\n\n<p align="center"><em>${v('intro')||'Building things.'}</em></p>\n\n---\n\n`;
+if(en('about'))m+=`## 👋 About Me\n\n${v('about')}\n\n---\n\n`;
+if(en('exploring'))m+=`## 🧠 What I'm Exploring\n\n<p align="center">${['Artificial Intelligence','Machine Learning','Cybersecurity','Open Source'].map(badge).join(' ')}</p>\n\n---\n\n`;
+if(en('stack'))m+=`## 🛠️ Tech Stack\n\n### 💻 Languages\n${['Python','JavaScript','TypeScript'].map(badge).join(' ')}\n\n### 🌐 Web Development\n${['HTML','CSS','React'].map(badge).join(' ')}\n\n### 🤖 AI / ML\n${['PyTorch','TensorFlow','Scikit Learn'].map(badge).join(' ')}\n\n---\n\n`;
+if(en('stats'))m+=`## 📊 GitHub Statistics\n\n<p align="center"><img src="https://github-readme-stats.vercel.app/api?username=${encodeURIComponent(u)}&show_icons=true&theme=dark&hide_border=true" alt="GitHub Statistics"></p>\n\n---\n\n`;
+if(en('activity'))m+=`## 📈 Contribution Activity\n\n<p align="center"><img src="https://ghchart.rshah.org/${encodeURIComponent(u)}" alt="GitHub Contribution Activity" width="100%"></p>\n\n---\n\n`;
+if(en('snake'))m+=`## 🐍 Contribution Snake\n\n<p align="center"><img src="https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake.svg" alt="Contribution Snake"></p>\n\n---\n\n`;
+if(en('opensource'))m+=`## 🚀 Open Source\n\nAdd your highlighted repositories here.\n\n---\n\n`;
+if(en('trophies'))m+=`## 🏆 GitHub Trophies\n\n<p align="center"><img src="https://github-profile-trophy.vercel.app/?username=${encodeURIComponent(u)}&theme=darkhub&no-frame=true&no-bg=true&row=1&column=6" alt="GitHub Trophies"></p>\n\n---\n\n`;
+if(en('building'))m+=`## 🚀 What I'm Building\n\nTurning ideas into projects, experiments into experience, and code into useful things.\n\n---\n\n`;
+if(en('focus'))m+=`## 🎯 Current Focus\n\n\`\`\`text\n${v('focus')||'Learning and building'}\n\`\`\`\n\n---\n\n`;
+if(en('journey'))m+=`## 🌱 Learning Journey\n\nAI / ML\n  ├── Learning fundamentals\n  ├── Building projects\n  └── Exploring new ideas\n\nDevelopment\n  ├── Clean code\n  ├── APIs\n  └── Open source\n\n---\n\n`;
+if(en('connect')){let a=[];if(v('email'))a.push(`[Email](mailto:${v('email')})`);if(v('linkedin'))a.push(`[LinkedIn](${v('linkedin')})`);if(v('website'))a.push(`[Website](${v('website')})`);a.push(`[GitHub](https://github.com/${encodeURIComponent(u)})`);m+=`## 🤝 Let's Connect\n\n${a.join(' • ')}\n`}
+document.getElementById('output').textContent=m.trim()+'\n'}
+function prompt(){return `You are the GitHub Profile README Generator assistant. Interview me conversationally to learn my name, GitHub username, headline, bio, skills, interests, projects, open-source work, current focus, learning journey and social links. Ask only what is useful and infer nothing that I did not provide. At the end, output ONLY valid JSON inside a code block using this schema:\n{"name":"","username":"","headline":"","intro":"","about":"","focus":"","email":"","linkedin":"","website":""}. Do not include Markdown outside the JSON.`}
+function status(t){document.getElementById('status').textContent=t;setTimeout(()=>document.getElementById('status').textContent='',3000)}
+async function copyPrompt(){try{await navigator.clipboard.writeText(prompt());status('ChatGPT prompt copied.')}catch(e){status('Copy blocked; select and copy manually.')}}
+document.getElementById('copyPrompt').onclick=copyPrompt;document.getElementById('openChat').onclick=()=>window.open('https://chatgpt.com/','_blank','noopener');
+document.getElementById('importChat').onclick=()=>{try{let raw=document.getElementById('chatInput').value.trim().replace(/^```(?:json)?/,'').replace(/```$/,'').trim();let d=JSON.parse(raw);for(const id of ids){if(d[id]!==undefined)document.getElementById(id).value=d[id]||''}render();status('Profile imported successfully.')}catch(e){status('Could not parse that payload. Paste the JSON from ChatGPT exactly.')}};
+document.getElementById('sampleChat').onclick=()=>{document.getElementById('chatInput').value=JSON.stringify({name:'Alex Developer',username:'alexdev',headline:'AI Engineer • Open Source Builder',intro:'Building practical AI systems and developer tools.',about:'I build software, explore AI, and contribute to open source projects.',focus:'AI Agents\nMachine Learning\nDeveloper Tools\nOpen Source',email:'alex@example.com',linkedin:'https://linkedin.com/in/alexdev',website:'https://alex.dev'});};
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');let chat=b.dataset.mode==='chat';document.getElementById('manual').classList.toggle('hidden',chat);document.getElementById('chat').classList.toggle('show',chat)});
+document.getElementById('download').onclick=()=>{let b=new Blob([document.getElementById('output').textContent],{type:'text/markdown'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='README.md';a.click();URL.revokeObjectURL(a.href);status('README.md downloaded.')};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(document.getElementById('output').textContent);status('Markdown copied.')}catch(e){status('Clipboard access blocked.')}};render();
+</script>
+</body></html>
