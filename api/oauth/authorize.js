@@ -1,4 +1,10 @@
-import { seal, baseUrl } from '../../lib/oauth.js';
+import { seal, baseUrl, pkceChallenge } from '../../lib/oauth.js';
+
+function randomVerifier() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
 
 export default async function handler(request) {
   const u = new URL(request.url);
@@ -7,7 +13,7 @@ export default async function handler(request) {
   if (u.searchParams.get('response_type') !== 'code' || u.searchParams.get('code_challenge_method') !== 'S256') return new Response('Only authorization_code + PKCE S256 is supported.', { status: 400 });
 
   const redirect = u.searchParams.get('redirect_uri');
-  let client = u.searchParams.get('client_id');
+  const client = u.searchParams.get('client_id');
   if (client.startsWith('https://')) {
     try {
       const meta = await fetch(client, { headers: { Accept: 'application/json' } });
@@ -16,6 +22,11 @@ export default async function handler(request) {
     } catch (_) { return new Response('Unable to validate MCP client metadata.', { status: 400 }); }
   }
 
+  // The MCP client's PKCE pair is kept for the MCP token exchange.
+  // A separate server-generated PKCE pair protects the upstream GitHub OAuth hop.
+  const githubVerifier = randomVerifier();
+  const githubChallenge = await pkceChallenge(githubVerifier);
+
   const state = await seal({
     client_id: client,
     redirect_uri: redirect,
@@ -23,6 +34,7 @@ export default async function handler(request) {
     state: u.searchParams.get('state'),
     code_challenge: u.searchParams.get('code_challenge'),
     resource: u.searchParams.get('resource') || `${baseUrl(request)}/api/mcp`,
+    github_code_verifier: githubVerifier,
     exp: Math.floor(Date.now()/1000) + 600,
   });
 
@@ -31,7 +43,7 @@ export default async function handler(request) {
   github.searchParams.set('client_id', process.env.GITHUB_CLIENT_ID || '');
   github.searchParams.set('redirect_uri', callback);
   github.searchParams.set('state', state);
-  github.searchParams.set('code_challenge', u.searchParams.get('code_challenge'));
+  github.searchParams.set('code_challenge', githubChallenge);
   github.searchParams.set('code_challenge_method', 'S256');
   github.searchParams.set('prompt', 'select_account');
   return Response.redirect(github.toString(), 302);
