@@ -13,7 +13,7 @@ export default async function handler(request) {
   const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ client_id: process.env.GITHUB_CLIENT_ID, client_secret: process.env.GITHUB_CLIENT_SECRET, code, redirect_uri: callback }),
+    body: JSON.stringify({ client_id: process.env.GITHUB_CLIENT_ID, client_secret: process.env.GITHUB_CLIENT_SECRET, code, redirect_uri: callback, code_verifier: auth.github_code_verifier }),
   });
   const token = await tokenRes.json();
   if (!token.access_token) return new Response(`GitHub authorization failed: ${token.error_description || token.error || 'unknown error'}`, { status: 400 });
